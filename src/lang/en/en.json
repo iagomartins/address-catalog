@@ -1,0 +1,21 @@
+{
+  "home": "Home",
+  "status": "Change the order status by clicking the icon.",
+  "name": "Name",
+  "address": "Address",
+  "phone": "Phone",
+  "email": "Email",
+  "created": "Created on",
+  "delete": "Delete",
+  "nodata": "There's no data created.",
+  "registry": "registry",
+  "rusure": "Are you sure in",
+  "updating": "updating",
+  "deleting": "deleting",
+  "item": "the item",
+  "no": "No",
+  "yes": "Yes",
+  "create": "Create",
+  "update": "Update",
+  "cancel": "Cancel"
+}

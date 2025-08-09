@@ -1,0 +1,135 @@
+@import './base.css';
+@import 'tailwindcss';
+
+#app {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 2rem;
+  font-weight: normal;
+}
+
+tr {
+  border: 1px solid hsla(160, 100%, 37%, 1);
+}
+
+tr:hover {
+  background-color: hsla(160, 100%, 37%, 0.2);
+}
+
+a,
+.green {
+  text-decoration: none;
+  color: hsla(160, 100%, 37%, 1);
+  transition: 0.4s;
+  padding: 3px;
+}
+
+.bg-background {
+  background-color: var(--color-background);
+}
+
+.bg-soft {
+  background-color: var(--color-background-soft);
+}
+
+.bg-action {
+  background-color: hsla(160, 100%, 37%, 1);
+}
+
+.full-width {
+  width: 100%;
+}
+
+.table-cell {
+  padding: 15px;
+  border-spacing: 5px;
+  text-align: justify;
+}
+
+.edit-cell {
+  text-align: center;
+}
+
+.edit-icon {
+  transition: all ease-in-out 0.3s;
+}
+
+.edit-icon:hover {
+  color: hsla(160, 100%, 37%, 1);
+}
+
+.btn-default {
+  border: 1px solid hsla(160, 100%, 37%, 1);
+  color: hsla(160, 100%, 37%, 1);
+  transition: all ease-in-out 0.3s;
+  padding: 1rem;
+  cursor: pointer;
+  display: block;
+}
+
+.btn-default:hover {
+  background-color: hsla(160, 100%, 37%, 1);
+  color: #fff;
+}
+
+.btn-default.active {
+  background-color: hsla(160, 100%, 37%, 1);
+  color: #fff;
+}
+
+.flex-end-line {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  padding-top: 15px;
+}
+
+.loader {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: #44444488;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.spinner {
+  animation: spin 1s linear infinite;
+}
+
+.language-toggle {
+  position: absolute;
+  right: 15px;
+}
+
+@media (hover: hover) {
+  a:hover {
+    background-color: hsla(160, 100%, 37%, 0.2);
+  }
+}
+
+@media (min-width: 1024px) {
+  body {
+    display: flex;
+    place-items: center;
+  }
+
+  #app {
+    display: flex;
+    flex-direction: column;
+    grid-gap: 30px;
+    padding: 0 2rem;
+  }
+}

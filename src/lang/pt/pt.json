@@ -1,0 +1,21 @@
+{
+  "home": "Início",
+  "status": "Altere o status de um pedido clicando sobre o ícone.",
+  "name": "Nome",
+  "address": "Endereço",
+  "phone": "Fone",
+  "email": "Email",
+  "created": "Criado em",
+  "delete": "Apagar",
+  "nodata": "Não há registros criados.",
+  "registry": "registro",
+  "rusure": "Tem certeza que deseja",
+  "updating": "alterar",
+  "deleting": "deletar",
+  "item": "o item",
+  "no": "Não",
+  "yes": "Sim",
+  "create": "Criar",
+  "update": "Alterar",
+  "cancel": "Cancelar"
+}
