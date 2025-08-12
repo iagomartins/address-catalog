@@ -1,5 +1,5 @@
-import type { DbId } from '@sqlite.org/sqlite-wasm'
-import { sqlite3Worker1Promiser } from '@sqlite.org/sqlite-wasm'
+import type { DbId } from '../types/DbId'
+import sqlite3Worker1Promiser from '@sqlite.org/sqlite-wasm'
 import { ref } from 'vue'
 
 const databaseConfig = {
@@ -42,6 +42,10 @@ export function useSQLite() {
           onready: () => resolve(_promiser),
         })
       })
+        .then((res) => res as ReturnType<typeof sqlite3Worker1Promiser>)
+        .catch((e) => {
+          throw new Error(e.message)
+        })
 
       if (!promiser) throw new Error('Failed to initialize promiser')
 

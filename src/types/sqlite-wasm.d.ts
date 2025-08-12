@@ -1,4 +1,5 @@
 import type { Worker } from 'node:worker_threads'
+import { DbId } from './DbId'
 
 declare module '@sqlite.org/sqlite-wasm' {
   type OnreadyFunction = () => void
@@ -10,8 +11,6 @@ declare module '@sqlite.org/sqlite-wasm' {
     debug?: (...args: unknown[]) => void
     onunhandled?: (event: MessageEvent) => void
   }
-
-  type DbId = string | undefined
 
   type PromiserMethods = {
     'config-get': {
@@ -90,7 +89,7 @@ declare module '@sqlite.org/sqlite-wasm' {
     messageArguments: PromiserMethods[T]['args'],
   ) => Promise<PromiserResponse<T>>
 
-  export function sqlite3Worker1Promiser(
+  export default function sqlite3Worker1Promiser(
     config?: Sqlite3Worker1PromiserConfig | OnreadyFunction,
   ): Promiser
 }

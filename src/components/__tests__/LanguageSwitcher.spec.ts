@@ -5,6 +5,7 @@ import LanguageSwitcher from '../LanguageSwitcher.vue'
 import { createI18n } from 'vue-i18n'
 import en from '@/lang/en/en.json'
 import pt from '@/lang/pt/pt.json'
+import { createPinia } from 'pinia'
 
 describe('LanguageSwitcher', () => {
   it('renders properly', () => {
@@ -18,9 +19,11 @@ describe('LanguageSwitcher', () => {
       },
     })
 
+    const pinia = createPinia()
+
     const wrapper = mount(LanguageSwitcher, {
       global: {
-        plugins: [i18n],
+        plugins: [i18n, pinia],
       },
     })
     expect(wrapper.vm.$t).toBeTruthy()
