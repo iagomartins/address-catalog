@@ -17,5 +17,9 @@
   "yes": "Yes",
   "create": "Create",
   "update": "Update",
-  "cancel": "Cancel"
+  "cancel": "Cancel",
+  "export": "Export",
+  "completed": "Completed",
+  "pending": "Pending",
+  "id": "ID"
 }

@@ -6,7 +6,7 @@ export const useLanguageStore = defineStore('language', {
   }),
   actions: {
     update(value: string) {
-      Object.assign(this.language, value)
+      this.language = value
     },
   },
 })

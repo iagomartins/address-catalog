@@ -1,85 +1,80 @@
-<script setup lang="ts">
-import { RouterLink } from 'vue-router'
-import { ref } from 'vue'
-import { useI18n } from 'vue-i18n'
-const lang = ref(false)
-const { t } = useI18n()
-</script>
-
 <template>
-  <header class="full-width">
-    <img alt="Vue logo" class="logo" src="@/assets/logo.svg" width="125" height="125" />
-
-    <div class="full-width" style="position: relative;">
-      <nav>
-        <RouterLink to="/">{{ t('home') }}</RouterLink>
-        <div class="language-toggle">
-          <LanguageSwitcher v-model="lang" />
+  <header class="w-full bg-teal-500/20 border-b border-teal-500/30 sticky top-0 z-40">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex items-center justify-between h-16">
+        <!-- Logo and Navigation -->
+        <div class="flex items-center gap-4">
+          <img
+            alt="Vue logo"
+            class="h-10 w-10"
+            src="@/assets/logo.svg"
+          />
+          <nav class="hidden md:flex items-center gap-4">
+            <RouterLink
+              to="/"
+              class="text-gray-300 hover:text-white px-3 py-2 rounded-md text-sm font-medium transition-colors"
+              active-class="text-white bg-teal-500/20"
+            >
+              {{ t('home') }}
+            </RouterLink>
+          </nav>
         </div>
-      </nav>
+
+        <!-- Language Switcher -->
+        <div class="flex items-center">
+          <LanguageSwitcher />
+        </div>
+
+        <!-- Mobile menu button -->
+        <button
+          @click="mobileMenuOpen = !mobileMenuOpen"
+          class="md:hidden inline-flex items-center justify-center p-2 rounded-md text-gray-300 hover:text-white hover:bg-teal-500/20 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-teal-500"
+          aria-label="Toggle menu"
+        >
+          <svg
+            v-if="!mobileMenuOpen"
+            class="h-6 w-6"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+          >
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+          </svg>
+          <svg
+            v-else
+            class="h-6 w-6"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+          >
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+          </svg>
+        </button>
+      </div>
+
+      <!-- Mobile menu -->
+      <div v-show="mobileMenuOpen" class="md:hidden border-t border-teal-500/30 py-4">
+        <nav class="flex flex-col gap-2">
+          <RouterLink
+            to="/"
+            class="text-gray-300 hover:text-white px-3 py-2 rounded-md text-sm font-medium transition-colors"
+            active-class="text-white bg-teal-500/20"
+            @click="mobileMenuOpen = false"
+          >
+            {{ t('home') }}
+          </RouterLink>
+        </nav>
+      </div>
     </div>
   </header>
 </template>
 
-<style scoped>
-header {
-  display: flex;
-  align-items: center;
-  justify-content: flex-start;
-  max-height: 100vh;
-  position: fixed;
-  top: 0;
-  left: 0;
-  background-color: hsla(160, 100%, 37%, 0.2);
-}
+<script setup lang="ts">
+import { ref } from 'vue'
+import { RouterLink } from 'vue-router'
+import { useI18n } from 'vue-i18n'
+import LanguageSwitcher from './LanguageSwitcher.vue'
 
-.logo {
-  display: block;
-  margin: 0 auto 2rem;
-  max-width: 40px;
-}
-
-nav {
-  width: 100%;
-  font-size: 12px;
-  text-align: center;
-}
-
-nav a.router-link-exact-active {
-  color: var(--color-text);
-}
-
-nav *:focus {
-  color: var(--color-text);
-}
-
-nav a.router-link-exact-active:hover {
-  background-color: hsla(160, 100%, 37%, 1);
-}
-
-nav * {
-  display: inline-block;
-  padding: 0 1rem;
-  transition: all ease-in-out 0.3s;
-}
-
-@media (min-width: 1024px) {
-  header {
-    display: flex;
-    place-items: center;
-    padding-right: calc(var(--section-gap) / 2);
-  }
-
-  .logo {
-    margin: 0 2rem 0 0;
-  }
-
-  nav {
-    text-align: left;
-    margin-left: 0;
-    font-size: 1rem;
-    padding: 1rem 0;
-  }
-}
-</style>
-<style src="@vueform/toggle/themes/default.css"></style>
+const { t } = useI18n()
+const mobileMenuOpen = ref(false)
+</script>

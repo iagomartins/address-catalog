@@ -17,5 +17,9 @@
   "yes": "Sim",
   "create": "Criar",
   "update": "Alterar",
-  "cancel": "Cancelar"
+  "cancel": "Cancelar",
+  "export": "Exportar",
+  "completed": "Concluído",
+  "pending": "Pendente",
+  "id": "ID"
 }

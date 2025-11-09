@@ -1,11 +1,7 @@
 <template>
-  <div class="loader">
-    <FontAwesomeIcon class="spinner" :icon="faSpinner" size="3x" />
-  </div>
+  <LoadingSpinner />
 </template>
 
-<script lang="ts" setup>
-import { faSpinner } from '@fortawesome/free-solid-svg-icons';
+<script setup lang="ts">
+import LoadingSpinner from './ui/LoadingSpinner.vue'
 </script>
-
-<style scoped></style>
