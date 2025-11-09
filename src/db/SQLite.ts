@@ -37,29 +37,81 @@ export function useSQLite() {
     error.value = null
 
     try {
-      // Add timeout to prevent infinite loading
-      const initPromise = new Promise<ReturnType<typeof sqlite3Worker1Promiser>>((resolve, reject) => {
-        const timeout = setTimeout(() => {
-          reject(new Error('SQLite initialization timeout. Please check your browser console and ensure required headers are set.'))
-        }, 10000) // 10 second timeout
+      // Check for SharedArrayBuffer support
+      if (typeof SharedArrayBuffer === 'undefined') {
+        throw new Error(
+          'SharedArrayBuffer is not available. This is required for SQLite WASM with OPFS. ' +
+            'Please ensure: 1) You are using a modern browser, 2) Accessing via localhost (not file://), ' +
+            '3) Required headers are set in vite.config.ts (Cross-Origin-Opener-Policy and Cross-Origin-Embedder-Policy)',
+        )
+      }
 
-        const _promiser = sqlite3Worker1Promiser({
-          onready: () => {
-            clearTimeout(timeout)
-            resolve(_promiser)
-          },
-          onerror: (err: unknown) => {
-            clearTimeout(timeout)
-            reject(err)
+      console.log('Starting SQLite WASM initialization...')
+
+      // Add timeout to prevent infinite loading
+      const initPromise = new Promise<ReturnType<typeof sqlite3Worker1Promiser>>(
+        (resolve, reject) => {
+          let resolved = false
+          const timeout = setTimeout(() => {
+            if (!resolved) {
+              resolved = true
+              reject(
+                new Error(
+                  'SQLite initialization timeout after 20 seconds. ' +
+                    'The worker may not be initializing. Check browser console for detailed errors.',
+                ),
+              )
+            }
+          }, 20000) // 20 second timeout
+
+          console.log('Creating SQLite worker...')
+          try {
+            const _promiser = sqlite3Worker1Promiser({
+              onready: () => {
+                if (!resolved) {
+                  resolved = true
+                  console.log('SQLite worker ready!')
+                  clearTimeout(timeout)
+                  resolve(_promiser)
+                }
+              },
+              onunhandled: (event: MessageEvent) => {
+                console.warn('SQLite worker unhandled message:', event)
+                // Don't reject here as onunhandled is for logging, not errors
+              },
+              debug: (...args: unknown[]) => {
+                console.log('[SQLite Debug]', ...args)
+              },
+            })
+
+            // If promiser is returned synchronously, resolve immediately
+            if (_promiser && typeof _promiser === 'function') {
+              // Check if it's already ready (some versions return the promiser immediately)
+              setTimeout(() => {
+                if (!resolved) {
+                  // Try to use it - if onready hasn't fired, the promiser might still work
+                  console.log('Promiser returned, waiting for onready...')
+                }
+              }, 100)
+            }
+          } catch (err) {
+            if (!resolved) {
+              resolved = true
+              clearTimeout(timeout)
+              reject(err)
+            }
           }
-        })
-      })
+        },
+      )
 
       promiser = await initPromise
 
       if (!promiser) throw new Error('Failed to initialize promiser')
 
+      console.log('Configuring SQLite...')
       await promiser('config-get', {})
+
+      console.log('Opening database...')
       const openResponse = await promiser('open', {
         filename: databaseConfig.filename,
       })
@@ -70,12 +122,14 @@ export function useSQLite() {
 
       dbId = openResponse.result.dbId as string
 
+      console.log('Creating tables...')
       await promiser('exec', {
         dbId,
         sql: databaseConfig.tables.orders.schema,
       })
 
       isInitialized.value = true
+      console.log('SQLite initialized successfully!')
       return true
     } catch (err) {
       error.value = err instanceof Error ? err : new Error('Unknown error')
