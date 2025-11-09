@@ -37,15 +37,25 @@ export function useSQLite() {
     error.value = null
 
     try {
-      promiser = await new Promise((resolve) => {
+      // Add timeout to prevent infinite loading
+      const initPromise = new Promise<ReturnType<typeof sqlite3Worker1Promiser>>((resolve, reject) => {
+        const timeout = setTimeout(() => {
+          reject(new Error('SQLite initialization timeout. Please check your browser console and ensure required headers are set.'))
+        }, 10000) // 10 second timeout
+
         const _promiser = sqlite3Worker1Promiser({
-          onready: () => resolve(_promiser),
+          onready: () => {
+            clearTimeout(timeout)
+            resolve(_promiser)
+          },
+          onerror: (err: unknown) => {
+            clearTimeout(timeout)
+            reject(err)
+          }
         })
       })
-        .then((res) => res as ReturnType<typeof sqlite3Worker1Promiser>)
-        .catch((e) => {
-          throw new Error(e.message)
-        })
+
+      promiser = await initPromise
 
       if (!promiser) throw new Error('Failed to initialize promiser')
 
@@ -69,6 +79,8 @@ export function useSQLite() {
       return true
     } catch (err) {
       error.value = err instanceof Error ? err : new Error('Unknown error')
+      isLoading.value = false
+      console.error('SQLite initialization error:', err)
       throw error.value
     } finally {
       isLoading.value = false
